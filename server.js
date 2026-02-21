@@ -15,10 +15,17 @@ app.post("/generate-pdf", async (req, res) => {
 
     // 🔥 Launch puppeteer safely for Render
     const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true
-    });
-
+        headless: "new",
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--no-first-run",
+            "--no-zygote",
+            "--single-process"
+        ],
+        });
     const page = await browser.newPage();
 
    await page.setContent(htmlContent, {
