@@ -9,64 +9,42 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 console.log("Executable Path:", puppeteer.executablePath());
 app.post("/generate-pdf", async (req, res) => {
-    try {
+  try {
+    const { htmlContent } = req.body;
 
-        const { htmlContent } = req.body;
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage"
+      ]
+    });
 
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--no-first-run",
-                "--no-zygote"
-            ]
-        });
+    const page = await browser.newPage();
 
-        const page = await browser.newPage();
+    await page.setContent(htmlContent, {
+      waitUntil: "networkidle0"
+    });
 
-        await page.setContent(htmlContent, {
-            waitUntil: "domcontentloaded"
-        });
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true
+    });
 
-        // 🔥 Extra safe wait
-        await page.waitForTimeout(500); // 0.5 second delay
+    await browser.close();
 
-        // 🔥 Wait for images fully
-        await page.evaluate(async () => {
-            const imgs = Array.from(document.images);
-            await Promise.all(
-                imgs.map(img => {
-                    if (img.complete) return;
-                    return new Promise(resolve => {
-                        img.onload = img.onerror = resolve;
-                    });
-                })
-            );
-        });
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=full-result.pdf"
+    });
 
-        const pdfBuffer = await page.pdf({
-            format: "A4",
-            printBackground: true,
-            scale: 0.95
-            
-        });
+    res.send(pdfBuffer);
 
-        await browser.close();
-        await browser.close();
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": "attachment; filename=full-result.pdf"
-        });
-
-        res.send(pdfBuffer);
-
-    } catch (error) {
-        console.error("PDF Error:", error);
-        res.status(500).send("PDF generation failed");
-    }
+  } catch (error) {
+    console.error("PDF Error:", error);
+    res.status(500).send("PDF generation failed");
+  }
 });
 
 app.listen(PORT, () => {
