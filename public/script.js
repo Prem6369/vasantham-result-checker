@@ -331,7 +331,7 @@ async function downloadFull() {
         </style>
     </head>
         <body>
-       <img src="${window.location.origin}/images/vasanthamcontactbanner.png" class="header-img" />
+      
             <div class="content">
 
                 <div class="title">

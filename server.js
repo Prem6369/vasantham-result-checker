@@ -49,11 +49,13 @@ app.post("/generate-pdf", async (req, res) => {
 
         const pdfBuffer = await page.pdf({
             format: "A4",
-            printBackground: true
+            printBackground: true,
+            scale: 0.95
+            
         });
 
         await browser.close();
-
+        await browser.close();
         res.set({
             "Content-Type": "application/pdf",
             "Content-Disposition": "attachment; filename=full-result.pdf"
