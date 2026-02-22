@@ -7,17 +7,18 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.static(path.join(__dirname, "public")));
-console.log("Executable Path:", puppeteer.executablePath());
 app.post("/generate-pdf", async (req, res) => {
   try {
     const { htmlContent } = req.body;
 
     const browser = await puppeteer.launch({
+      executablePath: "/usr/bin/chromium",
       headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage"
+        "--disable-dev-shm-usage",
+        "--disable-gpu"
       ]
     });
 
