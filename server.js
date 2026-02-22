@@ -11,15 +11,8 @@ app.post("/generate-pdf", async (req, res) => {
   try {
     const { htmlContent } = req.body;
 
-    const browser = await puppeteer.launch({
-      executablePath: "/usr/bin/chromium",
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu"
-      ]
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_TOKEN}`
     });
 
     const page = await browser.newPage();
