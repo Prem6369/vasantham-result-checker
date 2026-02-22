@@ -53,7 +53,7 @@ function checkResults() {
     }
 
     const text = textArea.value.trim();
-   
+
 
     container.innerHTML = "";
 
