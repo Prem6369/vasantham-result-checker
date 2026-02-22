@@ -242,101 +242,120 @@ async function downloadFull() {
   <html>
     <head>
         <style>
+    @page {
+        size: A4;
+        margin: 0;
+    }
 
-        @page {
-            size: A4;
-            margin: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            font-size: 12px;
-            color: #333;
-        }
-
-        /* 🔷 FULL WIDTH HEADER */
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f4f7fb;
+        color: #333;
+    }
+      /* 🔷 FULL WIDTH HEADER */
         .header-img {
             width: 100%;
             height: auto;
             display: block;
         }
+    /* 🔥 Gradient Header */
+    .header {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        padding: 25px 20px;
+        text-align: center;
+    }
 
-        /* 🔷 CONTENT AREA WITH SAFE MARGIN */
-        .content {
-            padding: 20mm;
-        }
+    .header h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
 
-        .title {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    .header p {
+        margin: 5px 0 0 0;
+        font-size: 12px;
+        opacity: 0.9;
+    }
 
-        .title h1 {
-            margin: 0;
-            font-size: 18px;
-            color: #2a5298;
-        }
+    /* Content */
+    .content {
+        padding: 20mm;
+    }
 
-        .divider {
-            margin: 15px 0;
-            border-top: 2px solid #2a5298;
-        }
+    /* Divider */
+    .divider {
+        height: 3px;
+        background: linear-gradient(90deg, #1e3c72, #2a5298);
+        margin: 20px 0;
+        border-radius: 4px;
+    }
 
-        .prize-block {
-            margin-bottom: 20px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
+    /* 🔥 Prize Card */
+    .prize-block {
+        background: #ffffff;
+        margin-bottom: 18px;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid #2a5298;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
 
-        .prize-block h3 {
-            margin: 0 0 8px 0;
-            font-size: 14px;
-            color: #2a5298;
-        }
+    .prize-block h3 {
+        margin: 0 0 10px 0;
+        font-size: 15px;
+        color: #1e3c72;
+    }
 
-        .number-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
+    /* Numbers */
+    .number-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
-        .number-list span {
-            padding: 5px 8px;
-            background: #f5f5f5;
-            border-radius: 5px;
-            font-size: 11px;
-            min-width: 40px;
-            text-align: center;
-        }
+    .number-list span {
+        padding: 6px 10px;
+        background: #eef3ff;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 500;
+        border: 1px solid #d0dcff;
+        min-width: 50px;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
 
-        .highlight {
-            background-color: #ffeb3b !important;
-            color: #000 !important;
-            font-weight: bold;
-            border: 1px solid #fbc02d;
-        }
+    /* 🔥 Highlight Winning */
+    .highlight {
+        background: linear-gradient(135deg, #ffcc00, #ff9800) !important;
+        color: #000 !important;
+        font-weight: bold;
+        border: none !important;
+        box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
+    }
 
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            color: #777;
-        }
-
+    /* Footer */
+    .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 10px;
+        color: #888;
+    }
         </style>
     </head>
         <body>
       
             <div class="content">
-
-                <div class="title">
-                    <h1>Vasantham DRAW RESULT SYSTEM</h1>
-                </div>
+            <img src="${window.location.origin}/images/vasanthamcontactbanner.png" class="header-img" />
+              <div class="header">
+                <h1>VASANTHAM DRAW RESULT</h1>
+                <p>Smart Ticket Range Matching Report</p>
+            </div>
 
                 <div class="divider"></div>
 
