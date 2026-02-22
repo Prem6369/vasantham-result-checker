@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.static(path.join(__dirname, "public")));
-
+console.log("Executable Path:", puppeteer.executablePath());
 app.post("/generate-pdf", async (req, res) => {
     try {
 
