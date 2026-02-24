@@ -7,7 +7,6 @@ function debug(label, value) {
     console.log(value);
     console.log("------------");
 }
-
 // ===============================
 // 🔷 ADD / REMOVE RANGE
 // ===============================
@@ -41,20 +40,10 @@ function checkResults() {
     console.clear();
     const textArea = document.getElementById("resultText");
     const container = document.getElementById("resultContainer");
-
-    if (!textArea) {
-        console.error("❌ resultText not found");
-        return;
-    }
-
-    if (!container) {
-        console.error("❌ resultContainer not found");
-        return;
-    }
+    const downloadBtn = document.getElementById("downloadImageBtn");
+    if (!textArea || !container) return;
 
     const text = textArea.value.trim();
-
-
     container.innerHTML = "";
 
     if (!text) {
@@ -63,106 +52,95 @@ function checkResults() {
     }
 
     const ranges = getRanges();
-    debug("🎯 USER RANGES", ranges);
-
     const prizeSections = parseResult(text);
-    debug("📦 PARSED PRIZE SECTIONS", prizeSections);
 
-    if (prizeSections.length > 0) {
-        document.querySelector(".download-btn.full").disabled = false;
-    }
-    if (prizeSections.length === 0) {
-        console.error("❌ No prize sections detected.");
-        alert("Parsing failed. Check result format.");
-        return;
-    }
+   if (prizeSections.length === 0) {
+    alert("Parsing failed.");
+    downloadBtn.disabled = true; // keep disabled
+    return;
+}
+
+ 
+    container.classList.add("result-sheet");
+
+    // 🔷 ADD HEADER DYNAMICALLY
+    const header = document.createElement("div");
+    header.className = "sheet-header";
+    header.innerHTML = `
+    <div class="sheet-header-row">
+        <div class="title">Vasantham Lottery</div>
+        <div class="date">${new Date().toLocaleDateString()}</div>
+    </div>
+    `;
+    container.appendChild(header);
 
     let matchCount = 0;
 
     prizeSections.forEach(section => {
 
-        console.log("🔷 Processing Section:", section.prizeName);
+        const sectionDiv = document.createElement("div");
+        sectionDiv.className = "sheet-section";
 
-        const block = document.createElement("div");
-        block.className = "prize-block";
+        const title = document.createElement("div");
+        title.className = "sheet-title";
+        title.innerText = `${section.prizeName} : ₹${section.amount}/-`;
 
-        const header = document.createElement("h3");
-        header.innerText = `${section.prizeName} - ₹${section.amount}`;
-
-        const numberList = document.createElement("div");
-        numberList.className = "number-list";
+        const numbersDiv = document.createElement("div");
+        numbersDiv.className = "sheet-numbers";
 
         section.tickets.forEach(ticket => {
 
-            console.log("Checking Ticket:", ticket);
-
             let isMatched = false;
 
-            ranges.forEach(range => {
+            for (let range of ranges) {
 
-                // ===============================
-                // 🥇 FULL TICKET (RK245689)
-                // ===============================
+                // 🥇 FULL TICKET (Ignore series)
                 if (/^[A-Z]{2}\d{6}$/i.test(ticket)) {
 
-                    const series = ticket.substring(0, 2).toUpperCase();
                     const number = parseInt(ticket.substring(2));
 
-                    if (
-                        range.series === series &&
-                        number >= range.start &&
-                        number <= range.end
-                    ) {
-                        console.log("✅ FULL MATCH:", ticket);
+                    if (number >= range.start && number <= range.end) {
                         isMatched = true;
                         matchCount++;
+                        break; // ✅ Stop after first match
                     }
                 }
 
-                // ===============================
-                // 🥈 4 DIGIT PRIZE (1802, 9215)
-                // ===============================
+                // 🥈 4 DIGIT PRIZE
                 else if (/^\d{4}$/.test(ticket)) {
 
                     const number = parseInt(ticket);
+                    const startLast4 = range.start % 10000;
+                    const endLast4 = range.end % 10000;
 
-                    // Extract last 4 digits from user range
-                    const startLast4 = parseInt(range.start.toString().slice(-4));
-                    const endLast4 = parseInt(range.end.toString().slice(-4));
-
-                    if (
-                        number >= startLast4 &&
-                        number <= endLast4
-                    ) {
-                        console.log("✅ 4 DIGIT MATCH:", ticket);
+                    if (number >= startLast4 && number <= endLast4) {
                         isMatched = true;
                         matchCount++;
+                        break; // ✅ Stop after first match
                     }
                 }
-
-            });
-
-            const span = document.createElement("span");
-            span.innerText = ticket;
-
-            if (isMatched) {
-                span.classList.add("highlight");
             }
 
-            numberList.appendChild(span);
+            const num = document.createElement("div");
+            num.className = "sheet-number";
+            num.innerText = ticket;
+
+            if (isMatched) {
+                num.classList.add("highlight");
+            }
+
+            numbersDiv.appendChild(num);
         });
 
-        block.appendChild(header);
-        block.appendChild(numberList);
-        container.appendChild(block);
-
+        sectionDiv.appendChild(title);
+        sectionDiv.appendChild(numbersDiv);
+        container.appendChild(sectionDiv);
     });
-
-    console.log("🎉 TOTAL MATCH COUNT:", matchCount);
 
     if (ranges.length > 0) {
         alert("Total Matches Found: " + matchCount);
     }
+    downloadBtn.disabled = false; // enable after success
 }
 
 // ===============================
@@ -211,17 +189,15 @@ function parseResult(text) {
 function getRanges() {
 
     const rows = document.querySelectorAll(".range-row");
-
     let ranges = [];
 
     rows.forEach(row => {
 
-        const series = row.querySelector(".series").value.trim().toUpperCase();
         const start = parseInt(row.querySelector(".start").value);
         const end = parseInt(row.querySelector(".end").value);
 
         if (!isNaN(start) && !isNaN(end)) {
-            ranges.push({ series, start, end });
+            ranges.push({ start, end });
         }
 
     });
@@ -229,156 +205,41 @@ function getRanges() {
     return ranges;
 }
 
-async function downloadFull() {
+async function downloadImage() {
 
-    const resultContainer = document.getElementById("resultContainer");
+    const element = document.getElementById("resultContainer");
 
-    if (!resultContainer.innerHTML.trim()) {
+    if (!element.innerHTML.trim()) {
         alert("No result to download.");
         return;
     }
 
-    const htmlTemplate = `
-  <html>
-    <head>
-        <style>
-    @page {
-        size: A4;
-        margin: 0;
-    }
+    // 🔹 Save original styles
+    const originalWidth = element.style.width;
+    const originalMaxWidth = element.style.maxWidth;
 
-    body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: #f4f7fb;
-        color: #333;
-    }
-      /* 🔷 FULL WIDTH HEADER */
-        .header-img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-    /* 🔥 Gradient Header */
-    .header {
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
-        color: white;
-        padding: 25px 20px;
-        text-align: center;
-    }
+    // 🔹 Force A4 / Desktop width for image
+    element.style.width = "900px";
+    element.style.maxWidth = "900px";
 
-    .header h1 {
-        margin: 0;
-        font-size: 22px;
-        letter-spacing: 1px;
-    }
-
-    .header p {
-        margin: 5px 0 0 0;
-        font-size: 12px;
-        opacity: 0.9;
-    }
-
-    /* Content */
-    .content {
-        padding: 20mm;
-    }
-
-    /* Divider */
-    .divider {
-        height: 3px;
-        background: linear-gradient(90deg, #1e3c72, #2a5298);
-        margin: 20px 0;
-        border-radius: 4px;
-    }
-
-    /* 🔥 Prize Card */
-    .prize-block {
-        background: #ffffff;
-        margin-bottom: 18px;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        border-left: 5px solid #2a5298;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    .prize-block h3 {
-        margin: 0 0 10px 0;
-        font-size: 15px;
-        color: #1e3c72;
-    }
-
-    /* Numbers */
-    .number-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .number-list span {
-        padding: 6px 10px;
-        background: #eef3ff;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
-        border: 1px solid #d0dcff;
-        min-width: 50px;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-
-    /* 🔥 Highlight Winning */
-    .highlight {
-        background: linear-gradient(135deg, #ffcc00, #ff9800) !important;
-        color: #000 !important;
-        font-weight: bold;
-        border: none !important;
-        box-shadow: 0 2px 6px rgba(255, 152, 0, 0.4);
-    }
-
-    /* Footer */
-    .footer {
-        margin-top: 40px;
-        text-align: center;
-        font-size: 10px;
-        color: #888;
-    }
-        </style>
-    </head>
-        <body>
-      
-            <div class="content">
-            <img src="${window.location.origin}/images/vasanthamcontactbanner.png" class="header-img" />
-              <div class="header">
-                <h1>VASANTHAM DRAW RESULT</h1>
-                <p>Smart Ticket Range Matching Report</p>
-            </div>
-
-                <div class="divider"></div>
-
-                ${resultContainer.innerHTML}
-
-                <div class="footer">
-                    Generated by Vasantham Result System
-                </div>
-            </div>
-        </body>
-     </html>
-  `;
-
-    const response = await fetch("/generate-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ htmlContent: htmlTemplate })
+    const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        windowWidth: 900
     });
 
-    const blob = await response.blob();
+    // 🔹 Restore original mobile layout
+    element.style.width = originalWidth;
+    element.style.maxWidth = originalMaxWidth;
+    const today = new Date();
+
+    const formattedDate =today.getDate().toString().padStart(2, '0') + "-" +
+    (today.getMonth() + 1).toString().padStart(2, '0') + "-" +
+    today.getFullYear();
 
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Full-Result.pdf";
+    link.href = canvas.toDataURL("image/png");
+    link.download =`Vasantham-Result-${formattedDate}.png`;
     link.click();
 }

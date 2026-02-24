@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vasantham Lottery </title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 
 <body>
@@ -30,7 +32,7 @@
 
             <div id="rangeContainer">
                 <div class="range-row">
-                    <input type="text" placeholder="Series (e.g NN)" class="series" />
+
                     <input type="number" placeholder="Start Number" class="start" />
                     <input type="number" placeholder="End Number" class="end" />
                     <button class="add-btn" onclick="addRange()">+</button>
@@ -40,17 +42,17 @@
             <button class="check-btn" onclick="checkResults()">Check Results</button>
         </div>
 
- <!-- <img src="${window.location.origin}/images/vasanthamcontactbanner.png" class="header-img" />-->
+        <!-- <img src="${window.location.origin}/images/vasanthamcontactbanner.png" class="header-img" />-->
         <!-- 🔷 RESULT CARD -->
         <div class="card fade-in">
             <div class="result-header">
                 <h2>Results</h2>
 
                 <div class="download-buttons">
-                    <button class="download-btn full" onclick="downloadFull()" disabled>
-                        ⬇ Download Full Result
-                    </button>
 
+                    <button class="download-btn image" id="downloadImageBtn" style="background-color: #32cf17;" onclick="downloadImage()" disabled>
+                        ⤓ Download Image
+                    </button>
                 </div>
             </div>
 
