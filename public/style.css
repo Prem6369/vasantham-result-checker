@@ -455,7 +455,7 @@ tr:hover {
     max-width: 900px;
     margin: auto;
     background: #ffffff;
-    padding: 15px;
+    padding: 5px;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
     overflow-x: hidden;
@@ -523,6 +523,21 @@ tr:hover {
 
 @media (max-width: 600px) {
 
+    /* LETTER PAD FIX */
+    .letterpad {
+        width: 100%;
+        height: auto;
+        background-size: contain;
+        background-position: top center;
+    }
+
+    /* RESULT AREA POSITION */
+    .result-content {
+        top: 180px;
+        left: 20px;
+        right: 20px;
+    }
+
     .sheet-title {
         font-size: 13px;
     }
@@ -537,8 +552,31 @@ tr:hover {
     }
 
     .sheet-header-row {
-        flex-direction: column;
         text-align: center;
         gap: 4px;
     }
+
+}
+.letterpad{
+    width:100%;
+    max-width:900px;
+    min-height:1300px;
+
+    margin:auto;
+
+    background-image:url("images/letterpad.png");
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+
+    position:relative;
+    display: none;
+}
+.result-content{
+
+    position:absolute;
+
+    top:150px;
+    left:23px;
+    right:0px;
+
 }

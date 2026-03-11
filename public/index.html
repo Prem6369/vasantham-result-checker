@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vasantham Lottery </title>
+    <title>Vasantham Lucky Center </title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -14,7 +14,7 @@
 
     <!-- 🔷 HEADER -->
     <header class="header">
-        <h1>Vasantham Draw Result System</h1>
+        <h1>Vasantham Lucky Center</h1>
         <p>Smart Range Matching & Result Highlight</p>
     </header>
 
@@ -50,19 +50,29 @@
 
                 <div class="download-buttons">
 
-                    <button class="download-btn image" id="downloadImageBtn" style="background-color: #32cf17;" onclick="downloadImage()" disabled>
+                    <button class="download-btn image" id="downloadImageBtn" style="background-color: #32cf17;"
+                        onclick="downloadImage()" disabled>
                         ⤓ Download Image
                     </button>
                 </div>
             </div>
 
             <!-- 🔷 RESULT CONTAINER (NEW STRUCTURE) -->
-            <div id="resultContainer" class="result-container">
-                <p class="empty-message">No results yet. Paste and check.</p>
-            </div>
+            <div id="resultContainer" class="letterpad">
 
+                <div id="resultContent" class="result-content">
+
+                    <div class="result-sheet">
+
+                        <p class="empty-message">
+                            No results yet. Paste and check.
+                        </p>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
-    </div>
 
     </div>
 

@@ -18,7 +18,6 @@ function addRange() {
     div.className = "range-row";
 
     div.innerHTML = `
-    <input type="text" placeholder="Series (e.g RK)" class="series" />
     <input type="number" placeholder="Start Number" class="start" />
     <input type="number" placeholder="End Number" class="end" />
     <button class="remove-btn" onclick="removeRange(this)">-</button>
@@ -37,9 +36,9 @@ function removeRange(btn) {
 
 function checkResults() {
 
-    console.clear();
+    document.getElementById("resultContainer").style.display = "block";
     const textArea = document.getElementById("resultText");
-    const container = document.getElementById("resultContainer");
+    const container = document.querySelector("#resultContent .result-sheet");
     const downloadBtn = document.getElementById("downloadImageBtn");
     if (!textArea || !container) return;
 
@@ -59,21 +58,11 @@ function checkResults() {
     downloadBtn.disabled = true; // keep disabled
     return;
 }
-
  
-    container.classList.add("result-sheet");
+   //container.classList.add("result-sheet");
 
     // 🔷 ADD HEADER DYNAMICALLY
-    const header = document.createElement("div");
-    header.className = "sheet-header";
-    header.innerHTML = `
-    <div class="sheet-header-row">
-        <div class="title">Vasantham Lottery</div>
-        <div class="date">${new Date().toLocaleDateString()}</div>
-    </div>
-    `;
-    container.appendChild(header);
-
+ 
     let matchCount = 0;
 
     prizeSections.forEach(section => {
@@ -214,32 +203,34 @@ async function downloadImage() {
         return;
     }
 
-    // 🔹 Save original styles
+    /* Save original styles */
     const originalWidth = element.style.width;
     const originalMaxWidth = element.style.maxWidth;
 
-    // 🔹 Force A4 / Desktop width for image
+    /* Force desktop layout for capture */
     element.style.width = "900px";
     element.style.maxWidth = "900px";
 
     const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3,
         useCORS: true,
         backgroundColor: "#ffffff",
         windowWidth: 900
     });
 
-    // 🔹 Restore original mobile layout
+    /* Restore styles */
     element.style.width = originalWidth;
     element.style.maxWidth = originalMaxWidth;
+
     const today = new Date();
 
-    const formattedDate =today.getDate().toString().padStart(2, '0') + "-" +
-    (today.getMonth() + 1).toString().padStart(2, '0') + "-" +
-    today.getFullYear();
+    const formattedDate =
+        today.getDate().toString().padStart(2, '0') + "-" +
+        (today.getMonth() + 1).toString().padStart(2, '0') + "-" +
+        today.getFullYear();
 
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
-    link.download =`Vasantham-Result-${formattedDate}.png`;
+    link.download = `Vasantham-Result-${formattedDate}.png`;
     link.click();
 }
