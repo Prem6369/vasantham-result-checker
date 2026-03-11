@@ -72,7 +72,7 @@ function checkResults() {
 
         const title = document.createElement("div");
         title.className = "sheet-title";
-        title.innerText = `${section.prizeName} : ₹${section.amount}/-`;
+        title.innerText = `${section.prizeName.replace(/\*/g,"")} : ₹${section.amount}/-`;
 
         const numbersDiv = document.createElement("div");
         numbersDiv.className = "sheet-numbers";
@@ -112,7 +112,7 @@ function checkResults() {
 
             const num = document.createElement("div");
             num.className = "sheet-number";
-            num.innerText = ticket;
+            num.innerText = ticket.replace(/\*/g, "");
 
             if (isMatched) {
                 num.classList.add("highlight");

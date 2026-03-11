@@ -462,7 +462,7 @@ tr:hover {
 }
 
 .sheet-section {
-    border-bottom: 1px solid #1f4ea3;
+    border-bottom: 1px solid #0b5827;
     padding: 6px 0;
 }
 
@@ -576,7 +576,7 @@ tr:hover {
     position:absolute;
 
     top:150px;
-    left:23px;
-    right:0px;
+    left:12px;
+    right:-9px;
 
 }
