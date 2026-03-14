@@ -138,39 +138,54 @@ function checkResults() {
 
 function parseResult(text) {
 
-    // 🔥 Remove unwanted parts first
-    text = text.replace(/```[\s\S]*?```/g, "");  // remove code block
-    text = text.replace(/https?:\/\/\S+/g, "");  // remove links
-    text = text.replace(/_To view[\s\S]*/i, ""); // remove footer part
+    // clean unwanted text
+    text = text
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/https?:\/\/\S+/g, "")
+        .replace(/Shared From The App/gi, "")
+        .replace(/Download.*Application/gi, "")
+        .replace(/\*/g, "")
+        .trim();
+
+    const lines = text.split("\n");
 
     let parsed = [];
+    let current = null;
 
-    const regex = /\*(.*?)Prize\s*:\*\s*Amount:\s*₹?([\d,]+)\/-(.*?)(?=\*\d+\s|\*Consolation|\*To view|$)/gs;
+    lines.forEach(line => {
 
-    let match;
+        line = line.trim();
 
-    while ((match = regex.exec(text)) !== null) {
+        // detect prize line
+        const prizeMatch = line.match(/(.*Prize)\s*:\s*Amount:\s*₹?([\d,]+)/i);
 
-        const prizeName = match[1].trim() + "Prize";
-        const amount = match[2];
-        const numbersRaw = match[3];
+        if (prizeMatch) {
 
-        // 🔥 Keep only valid tickets (RK123456 or 4-digit)
-        const tickets = numbersRaw
-            .replace(/\n/g, " ")
-            .split(/\s+/)
-            .filter(t => /^[A-Z]{2}\d{6}$/.test(t) || /^\d{4}$/.test(t));
+            if (current) parsed.push(current);
 
-        parsed.push({
-            prizeName,
-            amount,
-            tickets
-        });
-    }
+            current = {
+                prizeName: prizeMatch[1].trim(),
+                amount: prizeMatch[2],
+                tickets: []
+            };
+
+            // extract numbers from same line
+            const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
+            if (nums) current.tickets.push(...nums);
+
+        } else if (current) {
+
+            const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
+            if (nums) current.tickets.push(...nums);
+
+        }
+
+    });
+
+    if (current) parsed.push(current);
 
     return parsed;
 }
-
 // ===============================
 // 🔷 GET RANGES
 // ===============================
@@ -234,6 +249,6 @@ async function downloadImage() {
 
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
-    link.download = `claysys-${formattedDate}.png`;
+    link.download = `claysys    -${formattedDate}.png`;
     link.click();
 }
