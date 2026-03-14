@@ -138,13 +138,17 @@ function checkResults() {
 
 function parseResult(text) {
 
-    // clean unwanted text
+    // 🔧 Normalize mobile pasted text
     text = text
-        .replace(/```[\s\S]*?```/g, "")
-        .replace(/https?:\/\/\S+/g, "")
+        .replace(/\u00A0/g, " ")          // non-breaking space → normal space
+        .replace(/\r/g, "")
+        .replace(/\t/g, " ")
+        .replace(/ +/g, " ")
+        .replace(/\*/g, "")               // remove *
+        .replace(/```[\s\S]*?```/g, "")   // remove code blocks
+        .replace(/https?:\/\/\S+/g, "")   // remove links
         .replace(/Shared From The App/gi, "")
         .replace(/Download.*Application/gi, "")
-        .replace(/\*/g, "")
         .trim();
 
     const lines = text.split("\n");
@@ -156,11 +160,12 @@ function parseResult(text) {
 
         line = line.trim();
 
-        // detect prize line
-        const prizeMatch = line.match(/(.*Prize)\s*:\s*Amount:\s*₹?([\d,]+)/i);
+        // 🎯 Detect prize section
+        const prizeMatch = line.match(/(.+Prize)\s*:\s*Amount\s*:\s*₹?\s*([\d,]+)/i);
 
         if (prizeMatch) {
 
+            // save previous section
             if (current) parsed.push(current);
 
             current = {
@@ -173,8 +178,10 @@ function parseResult(text) {
             const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
             if (nums) current.tickets.push(...nums);
 
-        } else if (current) {
+        } 
+        else if (current) {
 
+            // extract numbers from next lines
             const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
             if (nums) current.tickets.push(...nums);
 
@@ -182,6 +189,7 @@ function parseResult(text) {
 
     });
 
+    // push last section
     if (current) parsed.push(current);
 
     return parsed;
