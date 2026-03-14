@@ -561,19 +561,22 @@ tr:hover {
     width:100%;
     max-width:900px;
     min-height:1300px;
+
     margin:auto;
 
     background-image:url("images/letterpad.png");
-    background-size:102% auto;
-    background-position:top center;
+    background-size:100% 100%;
     background-repeat:no-repeat;
 
     position:relative;
-    display:none;
+    display: none;
 }
 .result-content{
+
     position:absolute;
-    top:60px;
+
+    top:150px;
     left:12px;
-    right:1px;
+    right:-9px;
+
 }
