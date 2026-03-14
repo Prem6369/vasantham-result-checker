@@ -202,6 +202,7 @@ async function downloadImage() {
         alert("No result to download.");
         return;
     }
+    window.scrollTo(0,0);
 
     /* Save original styles */
     const originalWidth = element.style.width;
@@ -212,11 +213,13 @@ async function downloadImage() {
     element.style.maxWidth = "900px";
 
     const canvas = await html2canvas(element, {
-        scale: 3,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        windowWidth: 900
-    });
+    scale: 3,
+    useCORS: true,
+    backgroundColor: "#ffffff",
+    windowWidth: 900,
+    scrollX: 0,
+    scrollY: -window.scrollY
+});
 
     /* Restore styles */
     element.style.width = originalWidth;
