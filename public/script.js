@@ -234,6 +234,6 @@ async function downloadImage() {
 
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
-    link.download = `Vasantham-Result-${formattedDate}.png`;
+    link.download = `claysys-${formattedDate}.png`;
     link.click();
 }
