@@ -138,59 +138,35 @@ function checkResults() {
 
 function parseResult(text) {
 
-    // 🔧 Normalize mobile pasted text
-    text = text
-        .replace(/\u00A0/g, " ")          // non-breaking space → normal space
-        .replace(/\r/g, "")
-        .replace(/\t/g, " ")
-        .replace(/ +/g, " ")
-        .replace(/\*/g, "")               // remove *
-        .replace(/```[\s\S]*?```/g, "")   // remove code blocks
-        .replace(/https?:\/\/\S+/g, "")   // remove links
-        .replace(/Shared From The App/gi, "")
-        .replace(/Download.*Application/gi, "")
-        .trim();
-
-    const lines = text.split("\n");
+    // 🔥 Remove unwanted parts first
+    text = text.replace(/```[\s\S]*?```/g, "");  // remove code block
+    text = text.replace(/https?:\/\/\S+/g, "");  // remove links
+    text = text.replace(/_To view[\s\S]*/i, ""); // remove footer part
 
     let parsed = [];
-    let current = null;
 
-    lines.forEach(line => {
+    const regex = /\*(.*?)Prize\s*:\*\s*Amount:\s*₹?([\d,]+)\/-(.*?)(?=\*\d+\s|\*Consolation|\*To view|$)/gs;
 
-        line = line.trim();
+    let match;
 
-        // 🎯 Detect prize section
-        const prizeMatch = line.match(/(.+Prize)\s*:\s*Amount\s*:\s*₹?\s*([\d,]+)/i);
+    while ((match = regex.exec(text)) !== null) {
 
-        if (prizeMatch) {
+        const prizeName = match[1].trim() + "Prize";
+        const amount = match[2];
+        const numbersRaw = match[3];
 
-            // save previous section
-            if (current) parsed.push(current);
+        // 🔥 Keep only valid tickets (RK123456 or 4-digit)
+        const tickets = numbersRaw
+            .replace(/\n/g, " ")
+            .split(/\s+/)
+            .filter(t => /^[A-Z]{2}\d{6}$/.test(t) || /^\d{4}$/.test(t));
 
-            current = {
-                prizeName: prizeMatch[1].trim(),
-                amount: prizeMatch[2],
-                tickets: []
-            };
-
-            // extract numbers from same line
-            const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
-            if (nums) current.tickets.push(...nums);
-
-        } 
-        else if (current) {
-
-            // extract numbers from next lines
-            const nums = line.match(/[A-Z]{2}\d{6}|\d{4}/g);
-            if (nums) current.tickets.push(...nums);
-
-        }
-
-    });
-
-    // push last section
-    if (current) parsed.push(current);
+        parsed.push({
+            prizeName,
+            amount,
+            tickets
+        });
+    }
 
     return parsed;
 }
