@@ -77,49 +77,91 @@ function checkResults() {
         const numbersDiv = document.createElement("div");
         numbersDiv.className = "sheet-numbers";
 
-        section.tickets.forEach(ticket => {
+        // Special display for Consolation Prize
+if (section.prizeName.toLowerCase().includes("consolation")) {
 
-            let isMatched = false;
+    const seriesGroups = {};
 
-            for (let range of ranges) {
+    section.tickets.forEach(ticket => {
 
-                // 🥇 FULL TICKET (Ignore series)
-                if (/^[A-Z]{2}\d{6}$/i.test(ticket)) {
+        const series = ticket.substring(0, 2);
+        const number = ticket.substring(2);
 
-                    const number = parseInt(ticket.substring(2));
+        if (!seriesGroups[number]) {
+            seriesGroups[number] = [];
+        }
 
-                    if (number >= range.start && number <= range.end) {
-                        isMatched = true;
-                        matchCount++;
-                        break; // ✅ Stop after first match
-                    }
-                }
+        seriesGroups[number].push(series);
 
-                // 🥈 4 DIGIT PRIZE
-                else if (/^\d{4}$/.test(ticket)) {
+        // Preserve match counting
+        for (let range of ranges) {
+            const ticketNumber = parseInt(number);
 
-                    const number = parseInt(ticket);
-                    const startLast4 = range.start % 10000;
-                    const endLast4 = range.end % 10000;
+            if (ticketNumber >= range.start && ticketNumber <= range.end) {
+                matchCount++;
+                break;
+            }
+        }
+    });
 
-                    if (number >= startLast4 && number <= endLast4) {
-                        isMatched = true;
-                        matchCount++;
-                        break; // ✅ Stop after first match
-                    }
+    Object.keys(seriesGroups).forEach(number => {
+
+        const num = document.createElement("div");
+        num.className = "sheet-number consolation-series";
+
+        num.innerText =
+            seriesGroups[number].join(", ") + " - " + number;
+
+        numbersDiv.appendChild(num);
+    });
+
+} else {
+
+    // Existing logic for all other prizes
+    section.tickets.forEach(ticket => {
+
+        let isMatched = false;
+
+        for (let range of ranges) {
+
+            // FULL TICKET (Ignore series)
+            if (/^[A-Z]{2}\d{6}$/i.test(ticket)) {
+
+                const number = parseInt(ticket.substring(2));
+
+                if (number >= range.start && number <= range.end) {
+                    isMatched = true;
+                    matchCount++;
+                    break;
                 }
             }
 
-            const num = document.createElement("div");
-            num.className = "sheet-number";
-            num.innerText = ticket.replace(/\*/g, "");
+            // 4 DIGIT PRIZE
+            else if (/^\d{4}$/.test(ticket)) {
 
-            if (isMatched) {
-                num.classList.add("highlight");
+                const number = parseInt(ticket);
+                const startLast4 = range.start % 10000;
+                const endLast4 = range.end % 10000;
+
+                if (number >= startLast4 && number <= endLast4) {
+                    isMatched = true;
+                    matchCount++;
+                    break;
+                }
             }
+        }
 
-            numbersDiv.appendChild(num);
-        });
+        const num = document.createElement("div");
+        num.className = "sheet-number";
+        num.innerText = ticket.replace(/\*/g, "");
+
+        if (isMatched) {
+            num.classList.add("highlight");
+        }
+
+        numbersDiv.appendChild(num);
+    });
+}
 
         sectionDiv.appendChild(title);
         sectionDiv.appendChild(numbersDiv);
@@ -151,7 +193,7 @@ function parseResult(text) {
 
     while ((match = regex.exec(text)) !== null) {
 
-        const prizeName = match[1].trim() + "Prize";
+        const prizeName = match[1].trim() + " Prize";
         const amount = match[2];
         const numbersRaw = match[3];
 
@@ -233,6 +275,6 @@ async function downloadImage() {
 
     const link = document.createElement("a");
     link.href = canvas.toDataURL("image/png");
-    link.download = `claysys    -${formattedDate}.png`;
+    link.download = `Vasantham-Lottery-Result -${formattedDate}.png`;
     link.click();
 }
