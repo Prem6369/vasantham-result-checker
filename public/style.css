@@ -1,12 +1,29 @@
-/* 🔥 BODY BACKGROUND */
+
+/* =========================================
+   1. GLOBAL STYLES
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: #333;
+  overflow-x: hidden;
 }
 
-/* 🔷 HEADER */
+img {
+  max-width: 100%;
+}
+
+/* =========================================
+ 2. HEADER
+========================================= */
+
 .header {
   text-align: center;
   padding: 40px 20px;
@@ -16,42 +33,52 @@ body {
 
 .header h1 {
   margin: 0;
-  font-size: 32px;
+  font-size: clamp(22px, 4vw, 32px);
 }
 
 .header p {
   margin-top: 10px;
   opacity: 0.8;
+  font-size: clamp(13px, 2vw, 16px);
 }
 
-/* 🔷 CONTAINER */
+/* =========================================
+ 3. MAIN CONTAINER
+========================================= */
+
 .container {
   width: 90%;
   max-width: 1000px;
   margin: 30px auto;
 }
 
-/* 🔷 CARD STYLE */
 .card {
   background: rgba(255, 255, 255, 0.95);
   padding: 25px;
   border-radius: 15px;
   margin-bottom: 25px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  min-width: 0;
 }
 
-/* 🔷 RANGE INPUT ROW */
+/* =========================================
+ 4. RANGE INPUT
+========================================= */
+
 .range-row {
   display: flex;
+  align-items: center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
 .range-row input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  flex: 1;
   transition: 0.3s;
 }
 
@@ -61,16 +88,25 @@ body {
   box-shadow: 0 0 5px rgba(42, 82, 152, 0.5);
 }
 
-/* 🔷 ADD BUTTON */
-.add-btn {
-  background: #28a745;
+/* =========================================
+ 5. BUTTONS
+========================================= */
+
+.add-btn,
+.remove-btn {
+  width: 45px;
+  height: 40px;
+  flex-shrink: 0;
   color: white;
   border: none;
-  padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
   transition: 0.3s;
+}
+
+.add-btn {
+  background: #28a745;
 }
 
 .add-btn:hover {
@@ -78,7 +114,14 @@ body {
   transform: scale(1.05);
 }
 
-/* 🔷 CHECK BUTTON */
+.remove-btn {
+  background: #dc3545;
+}
+
+.remove-btn:hover {
+  background: #c82333;
+}
+
 .check-btn {
   width: 100%;
   margin-top: 15px;
@@ -97,7 +140,16 @@ body {
   transform: translateY(-2px);
 }
 
-/* 🔷 TABLE */
+/* =========================================
+ 6. TABLE
+========================================= */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -108,6 +160,7 @@ th {
   background: #2a5298;
   color: white;
   padding: 10px;
+  white-space: nowrap;
 }
 
 td {
@@ -120,22 +173,40 @@ tr:hover {
   background: #f1f1f1;
 }
 
-/* 🔷 HIGHLIGHT MATCH */
+/* =========================================
+ 7. HIGHLIGHT MATCH
+========================================= */
+
 .highlight {
-  background: #75ff56  !important;
+  background: #75ff56 !important;
   font-weight: bold;
   animation: pulse 1s infinite alternate;
 }
 
-/* 🔥 ANIMATIONS */
+/* =========================================
+ 8. ANIMATIONS
+========================================= */
+
 @keyframes slideDown {
-  from { transform: translateY(-30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+      transform: translateY(-30px);
+      opacity: 0;
+  }
+
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
 }
 
 @keyframes pulse {
-  from { background-color: #ffe066; }
-  to { background-color: #ffd43b; }
+  from {
+      background-color: #ffe066;
+  }
+
+  to {
+      background-color: #ffd43b;
+  }
 }
 
 .fade-in {
@@ -143,20 +214,42 @@ tr:hover {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
 }
-/* 🔷 RESULT HEADER */
+
+/* =========================================
+ 9. RESULT HEADER
+========================================= */
+
 .result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 12px;
 }
 
-/* 🔷 DOWNLOAD BUTTONS */
+.result-container {
+  width: 100%;
+  margin-top: 20px;
+  min-width: 0;
+}
+
+/* =========================================
+ 10. DOWNLOAD BUTTONS
+========================================= */
+
 .download-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -186,128 +279,14 @@ tr:hover {
 .download-btn.matched:hover {
   background: #e0a800;
 }
-/* ============================= */
-/* 📱 RESPONSIVE DESIGN SECTION */
-/* ============================= */
 
-/* 🔷 TABLE WRAPPER FOR MOBILE SCROLL */
-.table-wrapper {
-  overflow-x: auto;
-}
+/* =========================================
+ 11. RESULT TEXTAREA
+========================================= */
 
-/* Make table scrollable on small screen */
-@media (max-width: 768px) {
-
-  .header h1 {
-    font-size: 22px;
-  }
-
-  .header p {
-    font-size: 14px;
-  }
-
-  .container {
-    width: 95%;
-    margin: 20px auto;
-  }
-
-  .card {
-    padding: 18px;
-  }
-.result-textarea {
-  min-height: 150px;
-}
-  /* 🔷 STACK RANGE INPUTS VERTICALLY */
-.range-row {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.range-row input {
-  flex: 1 1 100%;
-}
-
-.range-row button {
-  flex: 0 0 45px;
-}
-
-  .range-row input {
-    width: 100%;
-  }
-
- .add-btn {
-  width: 45px;
-  height: 40px;
-  font-size: 18px;
-  padding: 0;
-}
-
-  .check-btn {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  /* 🔷 RESULT HEADER STACK */
-  .result-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .download-buttons {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .download-btn {
-    width: 100%;
-  }
-
-  /* 🔷 TABLE SCROLL */
-  table {
-    font-size: 14px;
-  }
-
-}
-
-/* 🔷 EXTRA SMALL MOBILE */
-@media (max-width: 480px) {
-
-  .header {
-    padding: 25px 10px;
-  }
-
-  .header h1 {
-    font-size: 18px;
-  }
-
-  .card h2 {
-    font-size: 18px;
-  }
-
-  th, td {
-    padding: 6px;
-    font-size: 12px;
-  }
-
-}.remove-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  width: 45px;
-  height: 40px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: 0.3s;
-}
-
-.remove-btn:hover {
-  background: #c82333;
-}
-/* 🔷 RESULT TEXTAREA */
 .result-textarea {
   width: 100%;
+  max-width: 100%;
   min-height: 180px;
   padding: 12px;
   border-radius: 10px;
@@ -323,260 +302,431 @@ tr:hover {
   outline: none;
   box-shadow: 0 0 8px rgba(42, 82, 152, 0.4);
 }
-/* ================================= */
-/* 📱 RESPONSIVE RESULT STRUCTURE   */
-/* ================================= */
 
-/* Default Desktop (Already Good) */
+/* =========================================
+ 12. PRIZE BLOCK
+========================================= */
 
-.result-container {
-  margin-top: 20px;
-}
-
-/* Prize Block */
 .prize-block {
-  background: #ffffff;
+  background: #fff;
   border-radius: 12px;
   padding: 18px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border-left: 6px solid #2a5298;
+  min-width: 0;
 }
 
-/* Prize Title */
 .prize-block h3 {
   margin-bottom: 12px;
   font-size: 18px;
   color: #2a5298;
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
-/* Numbers Layout */
 .number-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-/* Individual Number */
 .number-list span {
   background: #f1f1f1;
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 14px;
-  transition: 0.3s;
   text-align: center;
   min-width: 55px;
+  transition: 0.3s;
 }
 
-/* Highlight */
 .number-list span.highlight {
   background: #ffe066 !important;
   font-weight: bold;
 }
 
-/* ============================ */
-/* 📱 TABLET VIEW (Below 768px) */
-/* ============================ */
-
-@media (max-width: 768px) {
-
-  .prize-block {
-    padding: 14px;
-  }
-
-  .prize-block h3 {
-    font-size: 16px;
-  }
-
-  .number-list span {
-    font-size: 13px;
-    padding: 5px 8px;
-    min-width: 50px;
-  }
-
-  .result-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .download-buttons {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .download-btn {
-    width: 100%;
-  }
-}
-
-/* ============================ */
-/* 📱 SMALL MOBILE (Below 480px) */
-/* ============================ */
-
-@media (max-width: 480px) {
-
-  .header h1 {
-    font-size: 18px;
-  }
-
-  .prize-block h3 {
-    font-size: 15px;
-  }
-
-  .number-list {
-    gap: 6px;
-  }
-
-  .number-list span {
-    font-size: 12px;
-    padding: 4px 6px;
-    min-width: 45px;
-  }
-}
-.result-textarea {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-/* Mobile fix */
-@media (max-width: 768px) {
-  .result-textarea {
-    width: 100%;
-    font-size: 14px;
-  }
-}
-/* ===== COMPACT OFFICIAL SHEET STYLE ===== */
+/* =========================================
+ 13. OFFICIAL RESULT SHEET
+========================================= */
 
 .result-sheet {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    background: #ffffff;
-    
-    font-family: Arial, sans-serif;
-    box-sizing: border-box;
-    overflow-x: hidden;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+  padding: 10px;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .sheet-section {
-    border-bottom: 1px solid #0b5827;
-    padding: 6px 0;
+  border-bottom: 1px solid #0b5827;
+  padding: 6px 0;
 }
 
 .sheet-title {
-    color: #1f4ea3;
-    font-weight: bold;
-    font-size: 14px;
-    margin-bottom: 4px;
+  color: #1f4ea3;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 4px;
+  overflow-wrap: anywhere;
 }
 
 .sheet-numbers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .sheet-number {
-    width: 60px;
-    font-size: 13px;
-    text-align: center;
-    border-radius: 5px;
+  width: 60px;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 5px;
 }
 
-.highlight {
-    background: yellow;
-    font-weight: bold;
+.sheet-number.highlight {
+  background: yellow !important;
+  font-weight: bold;
 }
 
-/* HEADER INSIDE RESULT */
+/* =========================================
+ 14. SHEET HEADER
+========================================= */
 
 .sheet-header {
-    background: #240da9;
-    color: white;
-    padding: 8px 12px;
-    margin-bottom: 10px;
+  background: #240da9;
+  color: white;
+  padding: 8px 12px;
+  margin-bottom: 10px;
 }
 
 .sheet-header-row {
-    position: relative;
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    padding: 6px 0;
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px 0;
 }
 
 .sheet-header-row .title {
-    display: block;
+  display: block;
 }
 
 .sheet-header-row .date {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-/* MOBILE RESPONSIVE */
+/* =========================================
+ 15. LETTERPAD
+========================================= */
 
-@media (max-width: 600px) {
+.letterpad {
+  width: 100%;
+  max-width: 900px;
+  min-height: 1300px;
+  height: auto;
+  margin: auto;
 
-    /* LETTER PAD FIX */
-    .letterpad {
-        width: 100%;
-        height: auto;
-        background-size: contain;
-        background-position: top center;
-    }
+  background-image: url("images/letterpad.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
 
-    /* RESULT AREA POSITION */
-    .result-content {
-        top: 180px;
-        left: 20px;
-        right: 20px;
-    }
-
-    .sheet-title {
-        font-size: 13px;
-    }
-
-    .sheet-number {
-        width: 48px;
-        font-size: 12px;
-    }
-
-    .result-sheet {
-        padding: 10px;
-    }
-
-    .sheet-header-row {
-        text-align: center;
-        gap: 4px;
-    }
-
+  position: relative;
+  display: none;
 }
-.letterpad{
-    width:100%;
-    max-width:900px;
-    min-height:1300px;
 
-    margin:auto;
-
-    background-image:url("images/letterpad.png");
-    background-size:100% 100%;
-    background-repeat:no-repeat;
-
-    position:relative;
-    display: none;
+.result-content {
+  position: absolute;
+  top: 150px;
+  left: 12px;
+  right: 12px;
+  width: auto;
 }
-.result-content{
 
-    position:absolute;
+/* =========================================
+ 16. TABLET RESPONSIVE
+========================================= */
 
-    top:150px;
-    left:12px;
-    right:-9px;
+@media (max-width: 768px) {
 
+  .container {
+      width: 95%;
+      margin: 20px auto;
+  }
+
+  .header {
+      padding: 30px 15px;
+  }
+
+  .card {
+      padding: 18px;
+  }
+
+  .range-row {
+      flex-wrap: wrap;
+  }
+
+  .range-row input {
+      flex: 1 1 100%;
+  }
+
+  .add-btn,
+  .remove-btn {
+      width: 45px;
+      height: 40px;
+  }
+
+  .check-btn {
+      font-size: 14px;
+      padding: 10px;
+  }
+
+  .result-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+  }
+
+  .download-buttons {
+      width: 100%;
+  }
+
+  .download-btn {
+      flex: 1;
+  }
+
+  table {
+      font-size: 14px;
+      min-width: 500px;
+  }
+
+  .prize-block {
+      padding: 14px;
+  }
+
+  .prize-block h3 {
+      font-size: 16px;
+  }
+
+  .number-list span {
+      font-size: 13px;
+      padding: 5px 8px;
+      min-width: 50px;
+  }
+
+  .sheet-number {
+      width: 48px;
+      font-size: 12px;
+  }
+
+  .letterpad {
+      min-height: 1300px;
+      background-size: 100% 100%;
+  }
+
+  .result-content {
+      top: 180px;
+      left: 15px;
+      right: 15px;
+  }
+}
+
+/* =========================================
+ 17. MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 480px) {
+
+  body {
+      font-size: 14px;
+  }
+
+  .header {
+      padding: 25px 10px;
+  }
+
+  .header h1 {
+      font-size: 20px;
+  }
+
+  .header p {
+      font-size: 13px;
+  }
+
+  .container {
+      width: 94%;
+      margin: 15px auto;
+  }
+
+  .card {
+      padding: 14px;
+      border-radius: 12px;
+  }
+
+  .card h2 {
+      font-size: 18px;
+  }
+
+  .range-row {
+      gap: 8px;
+  }
+
+  .range-row input {
+      min-width: 0;
+      font-size: 14px;
+  }
+
+  .add-btn,
+  .remove-btn {
+      width: 42px;
+      height: 40px;
+      font-size: 17px;
+  }
+
+  .check-btn {
+      padding: 11px;
+      font-size: 14px;
+  }
+
+  .result-header {
+      align-items: stretch;
+  }
+
+  .result-header h2 {
+      font-size: 18px;
+  }
+
+  .download-buttons {
+      flex-direction: column;
+      width: 100%;
+  }
+
+  .download-btn {
+      width: 100%;
+      padding: 10px;
+  }
+
+  .result-textarea {
+      width: 100%;
+      min-height: 150px;
+      font-size: 13px;
+  }
+
+  .prize-block {
+      padding: 12px;
+      margin-bottom: 15px;
+  }
+
+  .prize-block h3 {
+      font-size: 15px;
+  }
+
+  .number-list {
+      gap: 6px;
+  }
+
+  .number-list span {
+      min-width: 45px;
+      padding: 5px 6px;
+      font-size: 12px;
+  }
+
+  th,
+  td {
+      padding: 7px;
+      font-size: 12px;
+  }
+
+  .result-sheet {
+      padding: 8px;
+  }
+
+  .sheet-title {
+      font-size: 12px;
+  }
+
+  .sheet-numbers {
+      gap: 5px;
+  }
+
+  .sheet-number {
+      width: 42px;
+      font-size: 11px;
+  }
+
+  .sheet-header {
+      padding: 8px;
+  }
+
+  .sheet-header-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 12px;
+  }
+
+  .sheet-header-row .date {
+      position: static;
+      transform: none;
+  }
+
+  /* MOBILE LETTERPAD */
+
+  .letterpad {
+      width: 100%;
+      min-height: 1300px;
+      background-size: 100% 100%;
+      background-position: top center;
+  }
+
+  .result-content {
+      top: 180px;
+      left: 10px;
+      right: 10px;
+  }
+}
+
+/* =========================================
+ 18. EXTRA SMALL DEVICES
+========================================= */
+
+@media (max-width: 360px) {
+
+  .container {
+      width: 96%;
+  }
+
+  .card {
+      padding: 10px;
+  }
+
+  .header h1 {
+      font-size: 18px;
+  }
+
+  .number-list {
+      gap: 4px;
+  }
+
+  .number-list span {
+      min-width: 40px;
+      font-size: 11px;
+      padding: 4px;
+  }
+
+  .sheet-number {
+      width: 38px;
+      font-size: 10px;
+  }
+
+  .result-content {
+      left: 8px;
+      right: 8px;
+  }
 }
