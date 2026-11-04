@@ -150,7 +150,7 @@ if (section.prizeName.toLowerCase().includes("consolation")) {
                 }
             }
         }
-
+fo
         const num = document.createElement("div");
         num.className = "sheet-number";
         num.innerText = ticket.replace(/\*/g, "");
